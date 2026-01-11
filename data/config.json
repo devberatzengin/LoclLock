@@ -1,0 +1,40 @@
+{
+  "app": {
+    "name": "LockLock",
+    "version": "1.0.0",
+    "environment": "development"
+  },
+
+  "encryption": {
+    "algorithm": "fernet",
+    "encoding": "utf-8",
+
+    "kdf": {
+      "type": "PBKDF2HMAC",
+      "hash": "SHA256",
+      "iterations": 390000,
+      "key_length": 32
+    },
+
+    "salt": {
+      "length": 16,
+      "storage": "database"
+    }
+  },
+
+  "security": {
+    "max_master_password_attempts": 5,
+    "lock_timeout_seconds": 300
+  },
+
+  "database": {
+    "type": "sqlite",
+    "path": "data/vault.db"
+  },
+
+  "ui": {
+    "theme": "dark",
+    "accent_color": "#3B82F6",
+    "secondary_color": "#1F2933"
+  }
+}
