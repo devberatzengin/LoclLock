@@ -1,6 +1,6 @@
 import hashlib
 from models.account import Account
-
+from models.category import Category
 class VaultController:
 
     def __init__(self, storage_service, encryption_service, search_service, logger):
@@ -59,6 +59,19 @@ class VaultController:
         if self.is_locked:
             raise PermissionError("Vault is locked")
         return self.storage.get_accounts_by_category_id(category_id)
+
+    def get_categories_for_dashboard(self):
+        # 1. Veritabanından ham veriyi al
+        rows = self.storage.get_categories_with_stats()
+        total_count = self.storage.get_total_account_count()
+
+        categories = []
+        for row in rows:
+            cat = Category(category_id=row[0], name=row[1])
+            cat.count = row[2] 
+            categories.append(cat)
+
+        return total_count, categories
 
     def search_accounts(self, keyword: str):
         if self.is_locked:

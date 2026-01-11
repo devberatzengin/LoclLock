@@ -25,26 +25,7 @@ class SimpleValidator:
             raise ValueError("Master password en az 4 karakter olmalıdır.")
         return True
 
-def ensure_categories_and_fetch(storage: StorageService):
 
-    try:
-        storage.connect()
-        storage.execute("SELECT count(*) FROM categories")
-        count = storage.fetchone()[0] 
-
-        if count == 0:
-            defaults = ["Social", "Work", "Finance", "Other", "Shopping", "Gaming"]
-            for name in defaults:
-                storage.execute("INSERT INTO categories (name, created_at) VALUES (?, ?)", 
-                                (name, datetime.now().isoformat()), commit=True)
-            print("Varsayılan kategoriler eklendi.")
-
-        storage.execute("SELECT id, name FROM categories")
-        rows = storage.fetchall()
-        return [(row[0], row[1]) for row in rows] 
-    except Exception as e:
-        print(f"Kategori hatası: {e}")
-        return []
 
 def main():
     app = QApplication(sys.argv)
@@ -63,8 +44,6 @@ def main():
         schema_sql = f.read()
         storage.conn.executescript(schema_sql) # type: ignore
     
-    categories = ensure_categories_and_fetch(storage)
-
     logger = LogService(storage)
     encryption = EncryptionService(storage)
     search = SearchService(storage)
@@ -79,9 +58,6 @@ def main():
     login_window = LoginScreen()
     dashboard = Dashboard()
     
-    cat_objects = [Category(category_id=c[0], name=c[1]) for c in categories]
-    dashboard.update_categories(cat_objects)
-
     # ================= LOGIC & SIGNALS =================
     def handle_login(password):
         try:
@@ -106,6 +82,10 @@ def main():
         try:
             accounts = vault_controller.list_accounts()
             dashboard.update_account_list(accounts)
+
+            total, cats = vault_controller.get_categories_for_dashboard()
+            dashboard.update_categories(cats, total)
+            
         except Exception as e:
             print(f"Veri yükleme hatası: {e}")
 
@@ -146,8 +126,9 @@ def main():
             QMessageBox.critical(dashboard, "Hata", f"Şifre çözülemedi: {e}")
 
     def on_add_account_clicked():
+        _, cat_objects = vault_controller.get_categories_for_dashboard()
         
-        dialog = AddAccountDialog()
+        cat_list_for_form = [(c.id, c.name) for c in cat_objects]
         
         from PyQt5.QtWidgets import QDialog, QVBoxLayout, QDialogButtonBox
         
@@ -156,7 +137,7 @@ def main():
         dlg.setFixedSize(400, 550)
         layout = QVBoxLayout(dlg)
         
-        form = AccountForm(categories)
+        form = AccountForm(cat_list_for_form) 
         layout.addWidget(form)
         
         btns = QDialogButtonBox(QDialogButtonBox.Save | QDialogButtonBox.Cancel)
@@ -171,9 +152,9 @@ def main():
                     site=data["site"],
                     username=data["username"],
                     raw_password=data["password"],
-                    category_id=data["category_id"]
+                    category_id=data["category_id"] 
                 )
-                load_dashboard_data()
+                load_dashboard_data() 
                 print("Hesap eklendi.")
             except Exception as e:
                 QMessageBox.critical(dashboard, "Hata", str(e))

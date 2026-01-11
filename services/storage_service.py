@@ -2,7 +2,6 @@ import sqlite3
 from pathlib import Path
 from datetime import datetime
 
-# Yeni modelimizi import ediyoruz
 from models.account import Account
 
 class StorageService:
@@ -149,6 +148,21 @@ class StorageService:
         self.execute("SELECT * FROM accounts WHERE category_id = ?", (category_id,))
         rows = self.cursor.fetchall()
         return [Account.from_row(row) for row in rows]
+
+    def get_categories_with_stats(self) -> list[tuple]:
+        query = """
+            SELECT c.id, c.name, COUNT(a.id) as count
+            FROM categories c
+            LEFT JOIN accounts a ON c.id = a.category_id
+            GROUP BY c.id, c.name
+        """
+        self.execute(query)
+        return self.cursor.fetchall()
+
+    def get_total_account_count(self) -> int:
+        self.execute("SELECT COUNT(*) FROM accounts")
+        row = self.cursor.fetchone()
+        return row[0] if row else 0
 
     def update_encrypted_password(self, account_id: int, encrypted: str):
         query = """

@@ -151,34 +151,31 @@ class Dashboard(QWidget):
 
     # ================= PUBLIC METHODS FOR CONTROLLER =================
 
-    def update_categories(self, categories: list):
-        """
-        Controller'dan gelen kategori listesiyle sidebar'ı günceller.
-        categories: List of Account/Category objects or tuples
-        """
-        # Eski widgetları temizle
-        while self.cat_layout.count() > 1: # Stretch item hariç
+    def update_categories(self, categories: list, total_count: int):
+
+        while self.cat_layout.count():
             item = self.cat_layout.takeAt(0)
             if item.widget():
                 item.widget().deleteLater()
         
         self.category_widgets = []
 
-        # "All Accounts" seçeneği (Manuel ekliyoruz)
-        all_card = CategoryCard(0, "All Accounts", 0) # ID 0 = Hepsi
+        # 1. "All Accounts" Kartı
+        all_card = CategoryCard(0, "All Accounts", total_count)
         all_card.clicked.connect(self.handle_category_click)
-        all_card.set_active(True) # Varsayılan seçili
-        self.cat_layout.insertWidget(0, all_card)
+        all_card.set_active(True)
+        self.cat_layout.addWidget(all_card)
         self.category_widgets.append(all_card)
 
-        # Diğer Kategoriler
-        for idx, cat in enumerate(categories):
-            # cat bir Category nesnesi olmalı: cat.id, cat.name
-            # Count şimdilik 0, ilerde dinamik yapılabilir
-            card = CategoryCard(cat.id, cat.name, 0)
+        # 2. Diğer Kategoriler
+        for cat in categories:
+            count = getattr(cat, 'count', 0) 
+            card = CategoryCard(cat.id, cat.name, count) 
             card.clicked.connect(self.handle_category_click)
-            self.cat_layout.insertWidget(idx + 1, card)
+            self.cat_layout.addWidget(card)
             self.category_widgets.append(card)
+
+        self.cat_layout.addStretch()
 
     def update_account_list(self, accounts: list):
         """
