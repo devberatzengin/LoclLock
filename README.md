@@ -1,6 +1,6 @@
-# 🔒 LoclLock
+# 🔒 LockLock
 
-**LoclLock**, verilerinizi bulutta değil, kendi cihazınızda şifreli olarak saklayan, modern arayüze sahip, güvenli ve açık kaynaklı bir parola yöneticisidir.
+**LockLock**, verilerinizi bulutta değil, kendi cihazınızda şifreli olarak saklayan, modern arayüze sahip, güvenli ve açık kaynaklı bir parola yöneticisidir.
 
 ![Python](https://img.shields.io/badge/Python-3.10%2B-blue)
 ![PyQt5](https://img.shields.io/badge/GUI-PyQt5-green)
@@ -10,7 +10,7 @@
 
 ## 📖 Proje Hakkında
 
-LoclLock, "Önce Güvenlik" ve "Modern UX" prensipleriyle geliştirilmiştir. Kullanıcıların hassas verilerini (şifreler, notlar) **AES-256** standardı ile şifreler ve bu verilere erişim sadece kullanıcının belirlediği **Master Password (Ana Şifre)** ile mümkündür.
+LockLock, "Önce Güvenlik" ve "Modern UX" prensipleriyle geliştirilmiştir. Kullanıcıların hassas verilerini (şifreler, notlar) **AES-256** standardı ile şifreler ve bu verilere erişim sadece kullanıcının belirlediği **Master Password (Ana Şifre)** ile mümkündür.
 
 Veritabanı olarak **SQLite** kullanılır ancak veriler veritabanına yazılmadan *önce* şifrelenir. Bu sayede veritabanı dosyası (`app.db`) çalınsa bile içerisindeki veriler ana şifre olmadan anlamsızdır.
 
@@ -47,8 +47,8 @@ Projeyi yerel makinenizde çalıştırmak için aşağıdaki adımları izleyin.
 
 1.  **Repoyu klonlayın:**
     ```bash
-    git clone [https://github.com/kullaniciadiniz/LoclLock.git](https://github.com/kullaniciadiniz/LoclLock.git)
-    cd LoclLock
+    git clone [https://github.com/kullaniciadiniz/LockLock.git](https://github.com/kullaniciadiniz/LockLock.git)
+    cd LockLock
     ```
 
 2.  **Sanal ortam oluşturun (Önerilen):**
@@ -81,7 +81,7 @@ Projeyi yerel makinenizde çalıştırmak için aşağıdaki adımları izleyin.
 
 ## 🏗️ Teknik Mimari ve Tasarım Desenleri
 
-LoclLock, sürdürülebilirlik, test edilebilirlik ve modülerlik ilkeleri gözetilerek **Model-View-Controller (MVC)** mimarisi üzerine inşa edilmiştir. Ayrıca "Service Layer" (Servis Katmanı) yaklaşımı ile iş mantığı veritabanı işlemlerinden izole edilmiştir.
+LockLock, sürdürülebilirlik, test edilebilirlik ve modülerlik ilkeleri gözetilerek **Model-View-Controller (MVC)** mimarisi üzerine inşa edilmiştir. Ayrıca "Service Layer" (Servis Katmanı) yaklaşımı ile iş mantığı veritabanı işlemlerinden izole edilmiştir.
 
 ### Mimari Katmanlar (MVC Breakdown)
 
@@ -111,7 +111,7 @@ Proje 4 ana katmandan oluşur:
 ### Dizin Yapısı
 
 ```plaintext
-LoclLock/
+LockLock/
 ├── controller/        # İş Mantığı (Business Logic)
 │   ├── app_controller.py   # Uygulama yaşam döngüsü ve giriş kontrolü
 │   ├── auth_controller.py  # Master password doğrulama işlemleri
