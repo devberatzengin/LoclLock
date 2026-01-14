@@ -1,3 +1,8 @@
+![Python](https://img.shields.io/badge/Python-3.10%2B-blue)
+![PyQt5](https://img.shields.io/badge/GUI-PyQt5-green)
+![Security](https://img.shields.io/badge/Encryption-AES--256-red)
+![License](https://img.shields.io/badge/License-MIT-yellow)
+
 # LockLock
 
 LockLock is a desktop-based password manager application focused on secure credential storage, authentication workflows, and security-oriented system design. The project emphasizes backend logic, cryptographic principles, and clean architecture rather than UI complexity.
@@ -62,6 +67,14 @@ This separation of concerns improves readability, testability, and future extens
 * Data access is strictly controlled through the application controller
 
 The architecture is intentionally designed to be encryption-ready and adaptable to stronger cryptographic standards.
+
+---
+
+## Application ScreenShots
+
+<img width="900" height="1378" alt="Screenshot 2026-01-11 at 11 34 11 PM_README" src="https://github.com/user-attachments/assets/96456868-7686-4d4c-8915-e0ca17b27862" />
+<img width="900" height="623" alt="Screenshot 2026-01-11 at 11 36 24 PM_README" src="https://github.com/user-attachments/assets/fd06f1e8-599d-4a95-b060-d27ca3c430bc" />
+<img width="434" height="650" alt="Screenshot 2026-01-14 at 1 26 44 PM" src="https://github.com/user-attachments/assets/039763fc-350b-4357-b75b-30487f5a3847" />
 
 ---
 
