@@ -38,33 +38,28 @@ class VaultController:
 
         return account_id
 
-    # --- YENİ EKLENEN UPDATE METODU ---
     def update_account(self, account_id, site, username, raw_password, category_id):
         if self.is_locked:
             raise PermissionError("Vault is locked")
 
-        # 1. Mevcut hesabı çek (Eski şifreyi korumak için)
         existing_account = self.storage.get_account_by_id(account_id)
         if not existing_account:
             raise ValueError("Hesap bulunamadı!")
 
-        # 2. Şifre alanı boşsa eskisini kullan, doluysa yenisini şifrele
         if raw_password and raw_password.strip():
             final_encrypted_password = self.encryption.encrypt(raw_password)
         else:
             final_encrypted_password = existing_account.encrypted_password
 
-        # 3. Güncel nesneyi oluştur (ID ve CreatedAt korunmalı)
         updated_account = Account(
             account_id=account_id,
             site=site,
             username=username,
             encrypted_password=final_encrypted_password,
             category_id=category_id,
-            created_at=existing_account.created_at # Eskisini koru
+            created_at=existing_account.created_at
         )
 
-        # 4. Kaydet
         success = self.storage.update_account(updated_account)
         if success:
             self.logger.info("ACCOUNT_UPDATED", f"id={account_id}")
@@ -108,7 +103,6 @@ class VaultController:
             raise PermissionError("Vault is locked")
             
         results = self.search.global_search(keyword) 
-        # LOG KALDIRILDI: Artık veritabanını şişirmemesi için log atmıyoruz.
         return results
 
     def change_master_key_and_reencrypt(self, old_key: bytes, new_key: bytes):

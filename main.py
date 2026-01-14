@@ -25,15 +25,19 @@ class SimpleValidator:
         return True
 
 def main():
-    app = QApplication(sys.argv)
 
+    app = QApplication(sys.argv)
 
     app.setApplicationName("LockLock")           
     app.setApplicationDisplayName("LockLock")    
     app.setOrganizationName("LockLock")
 
-    base_dir = os.path.dirname(os.path.abspath(__file__))
-    icon_path = os.path.join(base_dir, "app_icon.jpeg")
+    if getattr(sys, 'frozen', False):
+        base_dir = sys._MEIPASS
+    else:
+        base_dir = os.path.dirname(os.path.abspath(__file__))
+
+    icon_path = os.path.join(base_dir, "app_icon.jpeg") 
 
     if os.path.exists(icon_path):
         app.setWindowIcon(QIcon(icon_path))
@@ -42,10 +46,10 @@ def main():
     else:
         print(f"Uyarı: İkon dosyası bulunamadı: {icon_path}")
 
-
-    base_dir = os.path.dirname(os.path.abspath(__file__))
-    db_path = os.path.join(base_dir, "data", "app.db")
-    os.makedirs(os.path.dirname(db_path), exist_ok=True)
+    user_data_dir = os.path.join(os.path.expanduser("~"), "Documents", "LockLock")
+    os.makedirs(user_data_dir, exist_ok=True)
+    
+    db_path = os.path.join(user_data_dir, "app.db")
 
     storage = StorageService(db_path)
     storage.connect()
